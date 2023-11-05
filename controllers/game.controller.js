@@ -108,13 +108,23 @@ const submitGame = asyncWrapper(async (req, res, next)=>{
         const gameId = req.params.id;
         const result = req.body.result;
         const data = await Rating.findOne({userId:req.user.userId , gameId : gameId});
-        const userRating = data.gameRating;
-
+        let userRating = data.gameRating;
+        let currentRating = data.gameRating;
         for(let i = 0 ; i < result.length; i++){
-            console.log(result[i].questionRating)
+            await Question.findById(result[i]._id).then((question)=>{
+                if((result[i].answer).toLowerCase().trim() == question.answer){
+                    if(userRating <= question.questionRating)
+                        userRating += Math.trunc((question.questionRating - userRating)/2);
+                }
+                else{
+                    if(userRating >= question.questionRating)
+                        userRating -= Math.trunc((userRating - question.questionRating)/2);
+                }
+            })
         }
-
-        res.json('asdas');
+        data.gameRating = userRating;
+        await data.save();
+        res.json(`your rating changes from ${currentRating} to ${userRating}`);
     }
     catch(err){
         console.log(err);
