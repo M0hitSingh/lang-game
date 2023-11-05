@@ -1,6 +1,5 @@
 
-const sendSuccessApiResponse = (data, statusCode = 200) => {
-    const message  = "success";
+const sendSuccessApiResponse = (data,statusCode = 200,message = 'success' ) => {
     return {
         message,
         error : false,

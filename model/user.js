@@ -27,8 +27,17 @@ const userSchema = new mongoose.Schema(
             required: [true, "Please provide password"],
         }
     },
-    { timestamps: true }
+    {
+        methods :{
+            genrateJWT(){
+                return jwt.sign({ userId: this._id}, process.env.JWT_SECRET, {
+                    expiresIn: process.env.JWT_EXPIRATION,
+                });
+            }
+        }
+    }
 );
+
 
 
 module.exports =  mongoose.model("User", userSchema, "user");

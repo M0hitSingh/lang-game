@@ -1,7 +1,7 @@
 const { createCustomError } = require('../errors/customAPIError');
 const { sendSuccessApiResponse } = require('../middleware/successApiResponse')
-const User = require('../model/user');
 const asyncWrapper = require('../utils/asyncWrapper')
+const User = require('../model/user');
 const bcrypt = require('bcryptjs')
 const signup =  asyncWrapper(async (req,res,next)=>{
     try{
@@ -29,14 +29,13 @@ const signup =  asyncWrapper(async (req,res,next)=>{
 const loginUser = asyncWrapper(async (req, res, next) => {
     try{
         const { username, password } = req.body;
-        console.log("login");
         const emailExists = await User.findOne({username},
-            "username email password"
+            "username email password rating"
         );
         if (!emailExists) {
-            const message = "User Not Found";
+            const message = "user Not Found";
             return next(createCustomError(message, 404));
-        }   
+        } 
         const isPasswordRight = await bcrypt.compare(password, emailExists.password);
         if (!isPasswordRight) {
             const message = "Invalid credentials";
@@ -44,7 +43,7 @@ const loginUser = asyncWrapper(async (req, res, next) => {
         }
         const data = {
             username: emailExists.username,
-            token: generateJWT(emailExists),
+            token: emailExists.genrateJWT()
         };
         res.status(200).json(sendSuccessApiResponse(data));
     }

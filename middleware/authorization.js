@@ -15,17 +15,16 @@ const authorization = async (req, res, next) => {
     const token = authHeader.split(" ")[1];
     try {
         const payload =await jwt.verify(token, process.env.JWT_SECRET);
-        const user = await User.findOne({ isActive: true, _id: payload.userId ,isVerified:true});
+        const user = await User.findById(payload.userId);
         if (!user) {
             return next(createCustomError("Invalid JWT",401));
         }
         else{
-            req.user = { userId: payload.userId, details: user };
+            req.user = { userId: payload.userId};
         }
         next();
     } catch (error) {
         let message;
-        let err
         if (error instanceof jwt.TokenExpiredError) {
             message = "Token Expired";
 

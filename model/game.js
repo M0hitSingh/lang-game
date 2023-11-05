@@ -9,9 +9,11 @@ const gameSchema = new mongoose.Schema(
         },
         description:{
             type:String,
+        },
+        icon:{
+            type:String
         }
     },
-    { timestamps: true }
 );
 
 

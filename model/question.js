@@ -1,7 +1,7 @@
 const mongoose = require("mongoose")
 const schema = mongoose.Schema;
 
-const scoreSchema = new mongoose.Schema(
+const questionSchema = new mongoose.Schema(
     {
         gameId: {
             type:schema.Types.ObjectId,
@@ -18,28 +18,26 @@ const scoreSchema = new mongoose.Schema(
             enum :{
                 values: ["Text", "MCQ"],
                 message: "Please select Text or MCQ",
-            },
-            default:"Text"
+            }
         },
         options:[{
             type :String
         }],
         question:{
             type:String,
-            require : [true, "Please add question"],
+            required : [true, "Please add question"],
         },
         answer :{
             type:String,
             trim :true,
             lowercase:true,
-            require : [true,'Please Provide Answer']
+            required : [true,'Please Provide Answer']
         },
         questionRating:{
             type:Number
         }
-    },
-    { timestamps: true }
+    }
 );
 
 
-module.exports =  mongoose.model("Score", scoreSchema, "score");
+module.exports =  mongoose.model("Question", questionSchema, "question");
