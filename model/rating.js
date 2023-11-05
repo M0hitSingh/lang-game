@@ -1,25 +1,23 @@
 const mongoose = require("mongoose")
 const schema = mongoose.Schema;
 
-const scoreSchema = new mongoose.Schema(
+const ratingSchema = new mongoose.Schema(
     {
         gameId: {
-            type: String,
+            type:schema.Types.ObjectId,
+            ref:"game",
             required: [true, "Please provide gameId"],
         },
         userId: {
-            type: String,
+            type:schema.Types.ObjectId,
+            ref:"user",
             required: [true, "Please provide userId"],
         },
-        score:{
-            type:Number
-        },
-        time:{
+        gameRating:{
             type:Number
         }
-    },
-    { timestamps: true }
+    }
 );
 
 
-module.exports =  mongoose.model("Score", scoreSchema, "score");
+module.exports =  mongoose.model("Rating", ratingSchema, "rating");
